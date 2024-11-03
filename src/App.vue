@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, onMounted } from "vue"
 import { useAuth } from "@/composables/useAuth"
-import Auth from "@/views/Auth.vue"
+import Auth from '@/views/Auth.vue'
 import Header from "@/components/Header.vue"
 
 const { isLoggedIn, setUser, supabase, Loading, router, route, RouterView } = useAuth()

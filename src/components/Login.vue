@@ -6,8 +6,8 @@ const state = reactive({
   loading: false,
   disabled: false,
   error: undefined,
-  email: "guillaume18061988@yopmail.com",
-  password: "guillaume12",
+  email: "slavko.senkiv@gmail.com",
+  password: "slavko.senkiv@gmail.com",
 })
 
 const login = async () => {

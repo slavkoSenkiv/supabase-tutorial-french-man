@@ -1,6 +1,6 @@
 <script setup>
 import { reactive } from 'vue'
-import { supabase } from "@/supabase";
+import { supabase } from '@/supabase';
 
 const state = reactive({
   loading: false,
@@ -11,18 +11,26 @@ const state = reactive({
 })
 
 const signUp = async () => {
-  let { data, error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email: state.email,
-    password: state.password
+    password: state.password,
   })
+
+  if (error) {
+    console.error("Signup error:", error)
+    state.error = error.message
+  } else {
+    console.log("Signup success:", data)
+  }
 }
+/*  */
 </script>
 
 <template>
   <div class="mb-4 text-xl font-bold text-center">Signup</div>
   <form class="px-8 pt-6 pb-8 mb-4 bg-white rounded shadow-lg">
     <div class="mb-4">
-      <label class="block mb-2 text-sm font-bold text-gray-700" htmlFor="email" >
+      <label class="block mb-2 text-sm font-bold text-gray-700" htmlFor="email">
         Email
       </label>
       <input id="email" type="email" placeholder="Email" v-model="state.email" />
