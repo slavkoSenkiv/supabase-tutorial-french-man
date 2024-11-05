@@ -1,13 +1,9 @@
 <script setup lang="ts">
 import { supabase } from '@/supabase';
 import { ref } from "vue"
-/* 
-import User from "@/components/User.vue" */
 
-const pagination = ref(3)
 const insertOrder = async () => {
   try {
-
     const { data, error } = await supabase
       .from('orders')
       .insert({
@@ -20,13 +16,66 @@ const insertOrder = async () => {
       })
     if (data) {
       console.log(data);
-
     }
   } catch (error) {
     console.log(error);
   }
 }
 
+const fetchOrdersById = async (id: string) => {
+  try {
+    const { data: orders, error } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('client_id', id)
+    if (orders) {
+      console.log(orders);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const updateOrderPrice = async (id: string, newPrice: number) => {
+  const { data, error } = await supabase
+      .from('orders')
+      .update({ price: newPrice })
+      .eq('client_id', id)
+      .select()
+
+    if (data) {
+      console.log(data);
+    }
+    if (error) {
+      console.log(error); 
+    }
+}
+const deleteOrderByZipCode = async (zip_code: string) => {
+
+  const { error } = await supabase
+  .from('orders')
+  .delete()
+  .eq('zip_code', zip_code)
+          
+    if (error) {
+      console.log(error); 
+    }
+}
+</script>
+
+<template>
+  <main class="flex items-center justify-between">
+    <div class="container px-2 mx-auto my-8">
+      Hello World
+      <button class="block btn btn-primary" @click="insertOrder"> Insert order</button>
+      <button class="block btn btn-primary" @click="fetchOrdersById('0826683e-75d7-4231-abf8-a05c6d032f29')"> Fetch order by id</button>      
+      <button class="block btn btn-primary" @click="updateOrderPrice('0826683e-75d7-4231-abf8-a05c6d032f29', 17)"> Upd price</button>
+      <button class="block btn btn-primary" @click="deleteOrderByZipCode('98052')"> depete by zip code</button>
+    </div>
+  </main>
+</template>
+
+<!-- 
 //fetchOrders()
 
 /* 
@@ -187,16 +236,8 @@ const fetchOrders = async () => {
  }
 
  fetchOrders(); */
-</script>
 
-<template>
-  <main class="flex items-center justify-between">
-    <div class="container px-2 mx-auto my-8">
-      Hello World
-      <button class="block btn btn-primary" @click="insertOrder"> Insert order</button>
-    </div>
-  </main>
-</template>
+-->
 
 <!-- <template>
   <main class="flex items-center justify-between">
