@@ -14,6 +14,7 @@ interface Order {
 }
 
 const orders = ref<Order[]>([])
+const orderssecond = ref<Order[]>([])
 
 const insertOrder = async () => {
   try {
@@ -75,6 +76,26 @@ const deleteOrderByZipCode = async (zip_code: string) => {
   }
 }
 
+const fetchOrdersSecond = async () => {
+  try {
+    
+    let { data, error } = await supabase
+      .from('orderssecond')
+      .select(`
+        *,
+        clientssecond (
+          *
+        )
+      `)
+
+    if (data) {
+      console.log(data);
+      
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
 const fetchOrders = async () => {
   try {
     const { data, error } = await supabase
@@ -115,6 +136,7 @@ const channel = supabase
 
 
 fetchOrders()
+fetchOrdersSecond()
 </script>
 
 <template>
@@ -128,6 +150,17 @@ fetchOrders()
         price</button>
       <button class="block btn btn-primary" @click="deleteOrderByZipCode('98052')"> depete by zip code</button>
 
+      <h1>Orders Second</h1>
+      <div v-for="order, index in orderssecond" :key="index">
+        <div v-if="order" class="grid grid-cols-5 gap-3 px-3 py-2 my-2 border rounded-lg shadow-md">
+          <div v-if="order.name">{{ order.name }}</div>
+          <div>${{ order.price || 0 }}</div>
+          <div v-if="order.address">{{ order.address }}</div>
+          <div v-if="order.zip_code">{{ order.zip_code }}</div>
+          <div v-if="order.city">{{ order.city }}</div>
+        </div>
+      </div>
+      <h1>Vanilla Orders</h1>
       <div v-for="order, index in orders" :key="index">
         <div v-if="order" class="grid grid-cols-5 gap-3 px-3 py-2 my-2 border rounded-lg shadow-md">
           <div v-if="order.name">{{ order.name }}</div>
