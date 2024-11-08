@@ -11,6 +11,7 @@ interface Order {
   address: string,
   city: string,
   zip_code: string,
+  views: number
 }
 
 const orders = ref<Order[]>([])
@@ -35,7 +36,6 @@ const insertOrder = async () => {
     console.log(error);
   }
 }
-
 const fetchOrdersById = async (id: string) => {
   try {
     const { data: orders, error } = await supabase
@@ -49,7 +49,6 @@ const fetchOrdersById = async (id: string) => {
     console.log(error);
   }
 }
-
 const updateOrderPrice = async (id: string, newPrice: number) => {
   const { data, error } = await supabase
     .from('orders')
@@ -75,10 +74,9 @@ const deleteOrderByZipCode = async (zip_code: string) => {
     console.log(error);
   }
 }
-
 const fetchOrdersSecond = async () => {
   try {
-    
+
     let { data, error } = await supabase
       .from('orderssecond')
       .select(`
@@ -90,22 +88,23 @@ const fetchOrdersSecond = async () => {
 
     if (data) {
       console.log(data);
-      
+
     }
   } catch (error) {
     console.log(error);
   }
 }
 const fetchOrders = async () => {
-  try {
-    const { data, error } = await supabase
-      .from('orders')
-      .select('*')
 
-    if (data) {
-      orders.value = data
-    }
-  } catch (error) {
+  const { data, error } = await supabase
+    .from('orders')
+    .select('*')
+  if (data) {
+    console.log(data);
+    orders.value = data
+
+  }
+  if (error) {
     console.log(error);
   }
 }
@@ -134,9 +133,23 @@ const channel = supabase
   )
   .subscribe()
 
+const incrementViews = async () => {
+  try {
+    const { data, error } = await supabase.rpc('increment', {
+      row_id: '08350d9f-fc71-4d70-9f74-cca79ac0256e'
+    })
+    if (data) {
+      console.log("success")
+      console.log(data)
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
 
+incrementViews()
 fetchOrders()
-fetchOrdersSecond()
+// fetchOrdersSecond()
 </script>
 
 <template>
@@ -150,16 +163,6 @@ fetchOrdersSecond()
         price</button>
       <button class="block btn btn-primary" @click="deleteOrderByZipCode('98052')"> depete by zip code</button>
 
-      <h1>Orders Second</h1>
-      <div v-for="order, index in orderssecond" :key="index">
-        <div v-if="order" class="grid grid-cols-5 gap-3 px-3 py-2 my-2 border rounded-lg shadow-md">
-          <div v-if="order.name">{{ order.name }}</div>
-          <div>${{ order.price || 0 }}</div>
-          <div v-if="order.address">{{ order.address }}</div>
-          <div v-if="order.zip_code">{{ order.zip_code }}</div>
-          <div v-if="order.city">{{ order.city }}</div>
-        </div>
-      </div>
       <h1>Vanilla Orders</h1>
       <div v-for="order, index in orders" :key="index">
         <div v-if="order" class="grid grid-cols-5 gap-3 px-3 py-2 my-2 border rounded-lg shadow-md">
@@ -168,6 +171,7 @@ fetchOrdersSecond()
           <div v-if="order.address">{{ order.address }}</div>
           <div v-if="order.zip_code">{{ order.zip_code }}</div>
           <div v-if="order.city">{{ order.city }}</div>
+          <div v-if="order.views">{{ order.views }}</div>
         </div>
       </div>
     </div>
