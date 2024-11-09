@@ -13,7 +13,6 @@ interface Order {
   zip_code: string,
   views: number
 }
-
 const orders = ref<Order[]>([])
 const orderssecond = ref<Order[]>([])
 
@@ -149,7 +148,7 @@ const incrementViews = async () => {
 
 incrementViews()
 fetchOrders()
-// // fetchOrdersSecond()
+//fetchOrdersSecond()
 </script>
 
 <template>
@@ -177,51 +176,3 @@ fetchOrders()
     </div>
   </main>
 </template>
-
-<!-- 
- 
-
-const pagination = ref(9)
-
- const channel = supabase
-   .channel('my_new_channel_for_order')
-   .on(
-     'postgres_changes',
-     {
-       event: '*',
-       schema: 'public',
-       table: 'orders'
-     },
-     (event) => {
-       const { new: newOrder } = event;
-       orders.value = orders.value.map(order => {
-         if (order.id === newOrder.id) {
-           return {
-             ...order,
-             ...newOrder
-           }
-         }
-         return order
-       })
-     }
-   )
-   .subscribe()
-
-
-
- const incrementViews = async () => {
-   try {
-     const { data, error } = await supabase.rpc('increment', {
-       row_id: 'e1f3321e-3949-4ec1-afb8-65cbe3846648'
-     })
-
-     if (data) {
-       console.log("success")
-       console.log(data)
-     }
-
-   } catch (error) {
-     console.log(error)
-   }
- }
--->

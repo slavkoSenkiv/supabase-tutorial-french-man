@@ -3,6 +3,7 @@ import { reactive, onMounted } from "vue"
 import { useAuth } from "@/composables/useAuth"
 import Auth from "@/views/Auth.vue"
 import Header from "@/components/Header.vue"
+import User from './components/User.vue'
 
 const { isLoggedIn, setUser, supabase, Loading, router, route, RouterView } = useAuth()
 
@@ -31,6 +32,7 @@ onMounted(() => {
       <Auth v-if="!isLoggedIn" />
       <div v-else>
         <Header />
+        <User/>
         <RouterView />
       </div>
     </div>
