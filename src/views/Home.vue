@@ -149,7 +149,7 @@ const incrementViews = async () => {
 
 incrementViews()
 fetchOrders()
-// fetchOrdersSecond()
+// // fetchOrdersSecond()
 </script>
 
 <template>
